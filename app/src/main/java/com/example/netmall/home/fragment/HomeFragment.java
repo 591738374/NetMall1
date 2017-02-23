@@ -1,17 +1,26 @@
 package com.example.netmall.home.fragment;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.example.netmall.R;
 import com.example.netmall.base.BaseFragment;
+import com.example.netmall.home.bean.HomeBean;
+import com.example.netmall.utils.Constacts;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Call;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by WZ on 2017/2/22.
@@ -38,7 +47,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void initData() {
         super.initData();
-
+        getDataFromNet();
     }
 
 
@@ -62,5 +71,29 @@ public class HomeFragment extends BaseFragment {
                 rvHome.scrollToPosition(0);
                 break;
         }
+    }
+    public void getDataFromNet(){
+        OkHttpUtils.get()
+                .url(Constacts.HOME_URL)
+                .id(100)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("TAG", "联网失败" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        //当联网成功后会回调这里
+                        Log.e("TAG", "联网请求成功");
+                        progressData(response);
+                    }
+                });
+    }
+
+    private void progressData(String response) {
+        HomeBean homeBean = JSON.parseObject(response, HomeBean.class);
+        Log.e(TAG, "请求的数据"+homeBean.getResult().getAct_info().get(0).getName());
     }
 }
