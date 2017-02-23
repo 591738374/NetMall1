@@ -1,5 +1,6 @@
 package com.example.netmall.home.fragment;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.example.netmall.R;
 import com.example.netmall.base.BaseFragment;
+import com.example.netmall.home.adapter.HomeAdapter;
 import com.example.netmall.home.bean.HomeBean;
 import com.example.netmall.utils.Constacts;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -36,6 +38,8 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rvHome;
     @InjectView(R.id.ib_top)
     ImageButton ibTop;
+
+    private HomeAdapter adapter;
 
     @Override
     public View initView() {
@@ -95,5 +99,9 @@ public class HomeFragment extends BaseFragment {
     private void progressData(String response) {
         HomeBean homeBean = JSON.parseObject(response, HomeBean.class);
         Log.e(TAG, "请求的数据"+homeBean.getResult().getAct_info().get(0).getName());
+        //设置RecycleView的适配器
+        adapter=new HomeAdapter(mContext,homeBean.getResult());
+        rvHome.setAdapter(adapter);
+        rvHome.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
     }
 }

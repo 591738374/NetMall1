@@ -6,9 +6,10 @@ package com.example.netmall.utils;
 
 public class Constacts {
     //本地
-    //public static String BASE_URL = "http://localhost:8080/atguigu";
+    public static String BASE_URL = "http://192.168.1.5:8080/atguigu";
+//    public static String BASE_URL = "http://localhost:8080/atguigu";
     //公网
-    public static String BASE_URL = "http://182.92.5.3:8081/android/resources";
+//    public static String BASE_URL = "http://182.92.5.3:8081/android/resources";
 
     private static final String BASE_URL_JSON = BASE_URL+"/json/";
     /**
