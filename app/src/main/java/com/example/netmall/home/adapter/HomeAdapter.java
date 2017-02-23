@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -81,6 +83,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             return new BannerViewHolder(mContext, inflater.inflate(R.layout.banner_viewpager, null));
 
         } else if (viewType == CHANNEL) {
+            return new ChannelViewHolder(mContext, inflater.inflate(R.layout.channel_item, null));
 
         } else if (viewType == ACT) {
 
@@ -103,6 +106,9 @@ public class HomeAdapter extends RecyclerView.Adapter {
             bannerViewHolder.setData(results.getBanner_info());
 
         } else if (getItemViewType(position) == CHANNEL) {
+            ChannelViewHolder channelViewHolder = (ChannelViewHolder) holder;
+            //绑定数据
+            channelViewHolder.setData(results.getChannel_info());
 
         } else if (getItemViewType(position) == ACT) {
 
@@ -117,7 +123,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -179,6 +185,32 @@ public class HomeAdapter extends RecyclerView.Adapter {
                     Toast.makeText(mContext, "realPosition" + realPosition, Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    class ChannelViewHolder extends RecyclerView.ViewHolder {
+        private final Context mContext;
+        private final GridView gv_channel;
+        private ChannelAdapter adapter;
+
+
+        public ChannelViewHolder(Context mContext, View itemView) {
+            super(itemView);
+            this.mContext = mContext;
+            gv_channel = (GridView) itemView.findViewById(R.id.gv_channel);
+        }
+
+        public void setData(List<HomeBean.ResultBean.ChannelInfoBean> channelInfoBean) {
+            //设置GridView的适配器
+            adapter = new ChannelAdapter(mContext, channelInfoBean);
+            gv_channel.setAdapter(adapter);
+            gv_channel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
     }
 }
