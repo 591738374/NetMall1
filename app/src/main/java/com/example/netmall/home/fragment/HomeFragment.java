@@ -1,6 +1,6 @@
 package com.example.netmall.home.fragment;
 
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -76,7 +76,8 @@ public class HomeFragment extends BaseFragment {
                 break;
         }
     }
-    public void getDataFromNet(){
+
+    public void getDataFromNet() {
         OkHttpUtils.get()
                 .url(Constacts.HOME_URL)
                 .id(100)
@@ -98,10 +99,25 @@ public class HomeFragment extends BaseFragment {
 
     private void progressData(String response) {
         HomeBean homeBean = JSON.parseObject(response, HomeBean.class);
-        Log.e(TAG, "请求的数据"+homeBean.getResult().getAct_info().get(0).getName());
+        Log.e(TAG, "请求的数据" + homeBean.getResult().getAct_info().get(0).getName());
         //设置RecycleView的适配器
-        adapter=new HomeAdapter(mContext,homeBean.getResult());
+        adapter = new HomeAdapter(mContext, homeBean.getResult());
         rvHome.setAdapter(adapter);
-        rvHome.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
+
+        GridLayoutManager manager = new GridLayoutManager(mContext, 1);
+        rvHome.setLayoutManager(manager);
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position <= 3) {
+                    //按钮隐藏
+                    ibTop.setVisibility(View.GONE);
+                } else {
+                    ibTop.setVisibility(View.VISIBLE);
+                }
+
+                return 1;
+            }
+        });
     }
 }

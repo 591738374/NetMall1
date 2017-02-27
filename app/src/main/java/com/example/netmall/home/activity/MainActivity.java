@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initFragment() {
+     private void initFragment() {
         fragments = new ArrayList<>();
         fragments.add(new HomeFragment());
         fragments.add(new TypeFragment());
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
         mainRg.check(R.id.main_rb_home);
+
     }
 
     private void switchFragment(Fragment currentFragment) {
